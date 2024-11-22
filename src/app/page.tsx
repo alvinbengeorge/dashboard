@@ -1,101 +1,88 @@
+"use client"
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import { Raleway } from "next/font/google";
+
+const raleway_font = Raleway({
+  weight: ["100", "900"],
+  subsets: ["latin"]
+})
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [time, setTime] = useState(new Date());
+  const [playlist, setPlaylist] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+  
+  useEffect(() => {
+    const savedPlaylist = localStorage.getItem("playlist");
+    if (savedPlaylist) {
+      setPlaylist(savedPlaylist);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (playlist) {
+      localStorage.setItem("playlist", playlist);
+    } else {
+      localStorage.removeItem("playlist");
+    }
+  }, [playlist]);
+
+  return (
+    <div className={`grid place-items-center h-screen text-7xl grid-cols-1 lg:grid-cols-2 ${raleway_font.className} bg-black/60 duration-500 p-16 gap-2`}>
+      <div className="w-full h-full grid place-items-center grid-rows-3 gap-2">
+        <div className="grid place-items-center rounded-2xl w-full h-full gap-2 bg-black/30 shadow backdrop-blur-2xl"><p className="font-bold ">{time.toLocaleTimeString()}</p></div>
+        <div className="grid place-items-center grid-cols-2 grid-rows-2 gap-2 h-full w-full  text-4xl font-bold row-span-2">
+          <Link href="https://gmail.com" className="bg-red-500 w-full h-full rounded-2xl p-2 grid place-items-center hover:scale-105 duration-500">
+            <div className="grid place-items-center rounded-full bg-white p-2"><Image src="/icons/gmail.svg" alt="gmail" width={100} height={100} /></div>
+          </Link>
+          <Link href="https://linkedin.com" className="bg-blue-500 w-full h-full rounded-2xl p-2 grid place-items-center hover:scale-105 duration-500">
+            <div className="grid place-items-center rounded-full bg-white p-4"><Image src="/icons/linkedin.svg" alt="linkedin" width={100} height={100} /></div>
+          </Link>
+          <Link href="https://github.com" className="bg-gray-500 w-full h-full rounded-2xl p-2 grid place-items-center hover:scale-105 duration-500">
+            <div className="grid place-items-center rounded-full bg-white p-2"><Image src="/icons/github.svg" alt="github" width={100} height={100} /></div>
+          </Link>
+          <Link href="https://spotify.com" className="bg-green-500 w-full h-full rounded-2xl p-2 grid place-items-center hover:scale-105 duration-500">
+            <div className="grid place-items-center rounded-full bg-white p-2"><Image src="/icons/spotify.svg" alt="spotify" width={100} height={100} /></div>
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      <div className="grid place-items-center w-full h-full">
+        {playlist ? (
+          <div className="w-full h-full flex flex-col gap-2">
+            <iframe
+              src={`https://open.spotify.com/embed/${playlist}?utm_source=generator`}
+              width="100%" height="100%"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            ></iframe>
+            <button onClick={() => {
+              setPlaylist("");
+            }} className="text-4xl bg-red-500 rounded-2xl font-bold">Delete</button>
+          </div>
+        ) : (
+          <div className="grid place-items-center w-full h-full">
+            <input
+              type="text"
+              placeholder="Spotify Playlist URL"
+              value={playlist}
+              onChange={(e) => {
+                console.log(e.target.value.split("/"))
+                setPlaylist(e.target.value.split("/")[3] + "/" + e.target.value.split("/")[4]);
+              }}
+              className="p-2 rounded-lg text-black text-4xl font-bold"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
